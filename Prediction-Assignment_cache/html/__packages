@@ -1,0 +1,11 @@
+base
+data.table
+tidyr
+dplyr
+ggplot2
+lattice
+caret
+tibble
+bitops
+rattle
+tictoc
