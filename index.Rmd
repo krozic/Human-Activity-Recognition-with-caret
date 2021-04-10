@@ -1,5 +1,5 @@
 ---
-title: "Human Activity Recognition with Machine Learning"
+title: "Human Activity Recognition with caret"
 output:
   html_document:
     df_print: paged
@@ -48,7 +48,7 @@ The data contains 160 variables. One of these variables represents the outcome, 
 
 ## Preparing the Data
 
-### Check integrity of data: 
+### Check integrity of data 
 
 Making a contingency table based on the percent of usable data in each variable, I can quickly determine which columns are useful and which are not.
 
@@ -259,12 +259,12 @@ It may be useful to determine which variables more strongly contribute to a succ
 
 For example, there are no 'gyros' variables in the top 20 important variables, indicating that this component of the sensor array may not be necessary for successful prediction of exercise type.
 
-Visualizing important variables in the chosen model:
+### Visualizing important variables in the chosen model
 
 ```{r}
 imp_var <- as.data.frame((varImp(modFitRF)[1])$importance)
 imp_var <- rownames_to_column(imp_var) %>% arrange(desc(Overall))
-imp_data <- training %>% select(imp_var[1:5, 1])
+imp_data <- training %>% select(imp_var[1:6, 1])
 ```
 
 ```{r}
@@ -278,7 +278,7 @@ featurePlot(x = imp_data,
             )
 ```
 
-**Figure 1.** Box plots of the top 5 predictors for the random forest model.
+**Figure 1.** Box plots of the top 6 predictors for the random forest model.
 
 ```{r}
 transparentTheme(trans = 0.3)
@@ -292,9 +292,16 @@ featurePlot(x = imp_data,
             )
 ```
 
-**Figure 2.** Density plots of the top 5 predictors for the random forest model.
+**Figure 2.** Density plots of the top 6 predictors for the random forest model.
 
-The box plot reveals noticeable changes between exercise types in the `$pitch_forearm` variable, however there isn't much obvious difference between exercise types for the other variables. The density plots 
+The box plot reveals noticeable changes between exercise types in the `$pitch_forearm` variable, however there isn't much obvious difference between exercise types for the other variables. The density plots also provide some visual differences between exercise types, though there are similar trends between variables leading to a lot of overlap. The 'pairs' plot did not reveal any interesting visual patterns.
+
+## Final Prediction on 20 Test Cases
+
+```{r}
+predCases <- predict(modFitRF, newdata = pml_testing_data[,-53])
+predCases
+```
 
 ## Conclusion
 
